@@ -52,7 +52,16 @@ sumaCurri = curry sumaTupla
 suma :: Num a => [a] -> a
 suma = foldr (+) 0
 
--- elem :: (Eq a, Foldable t) => a -> t a -> Bool --hacer
+elem2 :: Eq a => a -> [a] -> Bool
+elem2 y = foldr (\x rec -> (x == y) || rec) False
+
+masMas :: [a] -> [a] -> [a]
+masMas xs ys = foldr(:) ys xs
+
+??
+-- filter2 :: (a -> Bool) -> [a] -> [a]
+-- filter2 p = foldr (\x rec -> if p x then x : rec else rec) []
+
 
 
 
