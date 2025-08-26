@@ -35,7 +35,9 @@
 --Ejercicio 2
 
 valorAbsoluto :: Float -> Float
-valorAbsoluto x = if x < 0 then -x else x
+valorAbsoluto x = if x < 0 
+                   then -x 
+                   else x
 
 bisiesto :: Int -> Bool
 bisiesto x | mod x 4 == 0 && mod x 100 /= 0 = True
