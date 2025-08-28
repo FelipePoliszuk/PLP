@@ -58,15 +58,35 @@ elem2 y = foldr (\x rec -> (x == y) || rec) False
 masMas :: [a] -> [a] -> [a]
 masMas xs ys = foldr(:) ys xs
 
-??
--- filter2 :: (a -> Bool) -> [a] -> [a]
--- filter2 p = foldr (\x rec -> if p x then x : rec else rec) []
+filter2 :: (a -> Bool) -> [a] -> [a]
+filter2 f = foldr (\x rec -> if f x 
+                              then x : rec 
+                              else rec) []
 
+map2 :: (a -> b) -> [a] -> [b]
+map2 f = foldr (\x rec -> f x : rec) []             
 
+--II.
+mejorSegun :: (a -> a -> Bool) -> [a] -> a
+mejorSegun f = foldr1 (\x rec -> if f x rec then x else rec)
 
+--III.
+sumasParciales :: Num a => [a] -> [a]
+sumasParciales []     = []
+sumasParciales (x:xs) = x : map (+x) (sumasParciales xs)
 
+--IV.
+sumaAlt :: Num a => [a] -> a
+sumaAlt = foldr (-) 0
 
+--V.
+sumaAltReverse :: Num a => [a] -> a
+sumaAltReverse xs = snd (foldl f (1,0) xs)
+  where
+    -- acumulador = (signo, resultado)
+    f (s,r) x = (-s, r + s*x)
 
+-- Ejercicio 4    
 
 
 
