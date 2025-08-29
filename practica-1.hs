@@ -88,5 +88,25 @@ sumaAltReverse xs = snd (foldl f (1,0) xs)
 
 -- Ejercicio 4    
 
+-- I
+-- permutaciones :: [a] -> [[a]]
+-- permutaciones [] = [[]]
+-- permutaciones xs = concatMap elegir [0 .. length xs - 1]
+--   where
+--     elegir i =
+--       let (antes, x:despues) = splitAt i xs
+--       in map (x:) (permutaciones (antes ++ despues))
+
+-- permutaciones [1,2,3] -> [[1,2,3],[1,3,2],[2,3,1],[2,1,3],[3,1,2],[3,2,1]]
+
+-- II
+-- partes :: [a] -> [[a]]
+-- partes xs = [drop 0 (take 0 xs)] ++ [drop 0 (take 1 xs)] ++ [drop 1 (take 2 xs)] ++ [drop 2 (take 3 xs)] ++ [drop 1 (take 3 xs)] ++ [drop 2 (take 1 xs)]
+-- partes = 
+
+
+-- partes [5, 1, 2] → [[], [5], [1], [2], [5, 1], [5, 2], [1, 2], [5, 1, 2]]
+-- (en algún orden).
+
 
 
