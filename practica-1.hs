@@ -1,6 +1,8 @@
+import Data.List (nub)
+
 -- Currificación y tipos
 
---Ejercicio 1
+-- Ejercicio 1
 
 -- I. Tipo de cada función
 -- max2 :: (Float, Float) -> Float
@@ -26,7 +28,7 @@
 -- curry :: ((a, b) -> c) -> a -> b -> c
 -- curry f x y = f (x, y)
 
---Ejemplo de uso de curry
+-- Ejemplo de uso de curry
 sumaTupla :: (Int, Int) -> Int
 sumaTupla (x, y) = x + y
 
@@ -48,65 +50,88 @@ sumaCurri = curry sumaTupla
 
 -- Ejercicio 3
 
---I.
-suma :: Num a => [a] -> a
+-- I.
+suma :: (Num a) => [a] -> a
 suma = foldr (+) 0
 
-elem2 :: Eq a => a -> [a] -> Bool
+elem2 :: (Eq a) => a -> [a] -> Bool
 elem2 y = foldr (\x rec -> (x == y) || rec) False
 
 masMas :: [a] -> [a] -> [a]
-masMas xs ys = foldr(:) ys xs
+masMas xs ys = foldr (:) ys xs
 
 filter2 :: (a -> Bool) -> [a] -> [a]
-filter2 f = foldr (\x rec -> if f x 
-                              then x : rec 
-                              else rec) []
+filter2 f =
+  foldr
+    ( \x rec ->
+        if f x
+          then x : rec
+          else rec
+    )
+    []
 
 map2 :: (a -> b) -> [a] -> [b]
-map2 f = foldr (\x rec -> f x : rec) []             
+map2 f = foldr (\x rec -> f x : rec) []
 
---II.
+-- II.
 mejorSegun :: (a -> a -> Bool) -> [a] -> a
 mejorSegun f = foldr1 (\x rec -> if f x rec then x else rec)
 
---III.
-sumasParciales :: Num a => [a] -> [a]
-sumasParciales []     = []
-sumasParciales (x:xs) = x : map (+x) (sumasParciales xs)
+-- III.
+sumasParciales :: (Num a) => [a] -> [a]
+sumasParciales [] = []
+sumasParciales (x : xs) = x : map (+ x) (sumasParciales xs)
 
---IV.
-sumaAlt :: Num a => [a] -> a
+-- IV.
+sumaAlt :: (Num a) => [a] -> a
 sumaAlt = foldr (-) 0
 
---V.
-sumaAltReverse :: Num a => [a] -> a
-sumaAltReverse xs = snd (foldl f (1,0) xs)
+-- V.
+sumaAltReverse :: (Num a) => [a] -> a
+sumaAltReverse xs = snd (foldl f (1, 0) xs)
   where
     -- acumulador = (signo, resultado)
-    f (s,r) x = (-s, r + s*x)
+    f (s, r) x = (-s, r + s * x)
 
--- Ejercicio 4    
+-- Ejercicio 4
 
--- I
--- permutaciones :: [a] -> [[a]]
--- permutaciones [] = [[]]
--- permutaciones xs = concatMap elegir [0 .. length xs - 1]
---   where
---     elegir i =
---       let (antes, x:despues) = splitAt i xs
---       in map (x:) (permutaciones (antes ++ despues))
+-- I (ver)
+permutaciones :: [a] -> [[a]]
+permutaciones [] = [[]]
+permutaciones xs = concatMap (\i -> map ((head (drop i xs)) :) (permutaciones (take i xs ++ drop (i + 1) xs))) [0 .. length xs - 1]
 
 -- permutaciones [1,2,3] -> [[1,2,3],[1,3,2],[2,3,1],[2,1,3],[3,1,2],[3,2,1]]
 
--- II
--- partes :: [a] -> [[a]]
--- partes xs = [drop 0 (take 0 xs)] ++ [drop 0 (take 1 xs)] ++ [drop 1 (take 2 xs)] ++ [drop 2 (take 3 xs)] ++ [drop 1 (take 3 xs)] ++ [drop 2 (take 1 xs)]
--- partes = 
-
+-- II (ver)
+partes :: [a] -> [[a]]
+partes [] = [[]]
+partes (x : xs) = partes xs ++ map (x :) (partes xs)
 
 -- partes [5, 1, 2] → [[], [5], [1], [2], [5, 1], [5, 2], [1, 2], [5, 1, 2]]
 -- (en algún orden).
+
+-- III
+prefijos :: [a] -> [[a]]
+prefijos [] = [[]]
+prefijos xs = prefijos (init xs) ++ [xs]
+
+-- prefijo [5, 1, 2] → [[], [5], [5, 1], [5, 1, 2]]
+
+-- extra --
+sufijo :: [a] -> [[a]]
+sufijo [] = [[]]
+sufijo xs = xs : sufijo (tail xs)
+
+-- IV (ver)
+
+sublistas :: (Eq a) => [a] -> [[a]]
+sublistas [] = [[]]
+sublistas xs = nub (concatMap prefijos (suffixes xs))
+
+suffixes :: [a] -> [[a]]
+suffixes [] = []
+suffixes (x:xs) = (x:xs) : suffixes xs
+
 
 
 
