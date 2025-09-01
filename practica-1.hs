@@ -166,7 +166,14 @@ sacarUnaOld x (y : ys)
 
 -- con recr
 sacarUna :: (Eq a) => a -> [a] -> [a]
-sacarUna x = recr (\y ys rec -> if x == y then ys else y : rec) []
+sacarUna x =
+  recr
+    ( \y ys rec ->
+        if x == y
+          then ys
+          else y : rec
+    )
+    []
 
 -- recr :: (f que recibe (cabeza, cola, resultado recursivo) -> resultado)
 --         -> valor base
@@ -181,16 +188,21 @@ sacarUna x = recr (\y ys rec -> if x == y then ys else y : rec) []
 -- no permite distinguir entre "seguir procesando" y "cortar y devolver la cola tal cual",
 -- ya que no expone la lista restante, solo su resultado plegado.
 
--- c) falta este
-insertarOrdenado :: Ord a => a -> [a] -> [a]
-insertarOrdenado x = recr (\y ys rec -> if x >= y then y: rec else x:y : rec) []
--- insertarOrdenado
+-- c)
+insertarOrdenado :: (Ord a) => a -> [a] -> [a]
+insertarOrdenado x =
+  recr
+    ( \y ys rec ->
+        if x >= y
+          then y : rec
+          else x : y : ys
+    )
+    [x]
 
-
-insertarOrdenado2 :: Ord a => a -> [a] -> [a]
+insertarOrdenado2 :: (Ord a) => a -> [a] -> [a]
 insertarOrdenado2 x [] = [x]
-insertarOrdenado2 x (y:ys) | x >= y = y: insertarOrdenado2 x ys
-                           | otherwise = x:y:ys
-
+insertarOrdenado2 x (y : ys)
+  | x >= y = y : insertarOrdenado2 x ys
+  | otherwise = x : y : ys
 
 -- insertarOrdenado 5 [1,2,3,8,10] --> [1,2,3,5,8,10]
