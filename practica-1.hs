@@ -151,17 +151,46 @@ entrelazar (x : xs) = \ys ->
 
 -- Ejercicio 6
 
+-- Recursión primitiva sobre listas
+recr :: (a -> [a] -> b -> b) -> b -> [a] -> b
+recr _ z [] = z
+recr f z (x : xs) = f x xs (recr f z xs)
+
+-- a)
+-- old school way
+sacarUnaOld :: (Eq a) => a -> [a] -> [a]
+sacarUnaOld _ [] = []
+sacarUnaOld x (y : ys)
+  | x == y = ys
+  | otherwise = y : sacarUnaOld x ys
+
+-- con recr
+sacarUna :: (Eq a) => a -> [a] -> [a]
+sacarUna x = recr (\y ys rec -> if x == y then ys else y : rec) []
+
+-- recr :: (f que recibe (cabeza, cola, resultado recursivo) -> resultado)
+--         -> valor base
+--         -> lista
+--         -> resultado final
+
+-- b)
+-- foldr le da a la función f: el elemento actual x y el resultado recursivo sobre la cola foldr f z xs
+-- Pero no tenemos acceso directo a la cola xs...
+
+-- Por eso, el esquema de recursión estructural (foldr) no es adecuado:
+-- no permite distinguir entre "seguir procesando" y "cortar y devolver la cola tal cual",
+-- ya que no expone la lista restante, solo su resultado plegado.
+
+-- c) falta este
+insertarOrdenado :: Ord a => a -> [a] -> [a]
+insertarOrdenado x = recr (\y ys rec -> if x >= y then y: rec else x:y : rec) []
+-- insertarOrdenado
 
 
+insertarOrdenado2 :: Ord a => a -> [a] -> [a]
+insertarOrdenado2 x [] = [x]
+insertarOrdenado2 x (y:ys) | x >= y = y: insertarOrdenado2 x ys
+                           | otherwise = x:y:ys
 
 
-
-
-
-
-
-
-
-
-
-
+-- insertarOrdenado 5 [1,2,3,8,10] --> [1,2,3,5,8,10]
