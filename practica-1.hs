@@ -130,7 +130,37 @@ sublistas xs = nub (concatMap prefijos (suffixes xs))
 
 suffixes :: [a] -> [[a]]
 suffixes [] = []
-suffixes (x:xs) = (x:xs) : suffixes xs
+suffixes (x : xs) = (x : xs) : suffixes xs
+
+-- Ejercicio 5
+elementosEnPosicionesPares :: [a] -> [a]
+elementosEnPosicionesPares [] = []
+elementosEnPosicionesPares (x : xs) =
+  if null xs
+    then [x]
+    else x : elementosEnPosicionesPares (tail xs)
+
+entrelazar :: [a] -> [a] -> [a]
+entrelazar [] = id
+entrelazar (x : xs) = \ys ->
+  if null ys
+    then x : entrelazar xs []
+    else x : head ys : entrelazar xs (tail ys)
+
+-- ninguna es recursion estructural pues en el paso recursivo usan la cola xs sin ser la expresion (f xs)
+
+-- Ejercicio 6
+
+
+
+
+
+
+
+
+
+
+
 
 
 
