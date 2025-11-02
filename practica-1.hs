@@ -82,6 +82,9 @@ sumasParciales :: (Num a) => [a] -> [a]
 sumasParciales [] = []
 sumasParciales (x : xs) = x : map (+ x) (sumasParciales xs)
 
+-- sumasParciales2 :: Num a => [a] -> [a]
+-- sumasParciales2 l = foldl (\rec x -> rec ++ [x + (if null rec then 0 else last rec)]) [] l
+
 -- IV.
 sumaAlt :: (Num a) => [a] -> a
 sumaAlt = foldr (-) 0
@@ -206,3 +209,36 @@ insertarOrdenado2 x (y : ys)
   | otherwise = x : y : ys
 
 -- insertarOrdenado 5 [1,2,3,8,10] --> [1,2,3,5,8,10]
+
+-- Ejercicio 7
+
+-- I.
+-- uncurry :: (a -> b -> c) -> ((a, b) -> c)
+-- uncurry f (x, y) = f x y
+
+-- map :: (a -> b) -> [a] -> [b]
+
+-- mapPares :: (a -> b -> c) -> [(a,b)] -> [c]
+-- mapPares f = foldr (\x  rec -> (uncurry f)  x : rec) []
+
+
+mapPares :: (a -> b -> c) -> [(a,b)] -> [c]
+mapPares f = map (uncurry f)
+
+-- II.
+-- zip :: [a] -> [b] -> [(a, b)]
+
+armarPares :: [a] -> [b] -> [(a, b)]    
+armarPares = zipWith (,)
+
+-- zip = zipWith (,)
+
+-- Versión que usa recursión explicita, ojo.
+armarPares2 :: [a] -> [b] -> [(a, b)]    
+armarPares2 _ [] = []
+armarPares2 [] _ = []
+armarPares2 (x:xs) (y:ys) =  [(x,y)] ++ armarPares2 xs ys
+
+-- III
+mapDoble :: (a -> b -> c) -> [a] -> [b] -> [c]
+mapDoble f xs ys = map (uncurry f) (zip xs ys)
