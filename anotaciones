@@ -1,0 +1,23 @@
+% unico(L,U)
+
+% hayUnRepetido(+L)
+
+% sinRepetidos(+L) 
+
+% desde(+X,+Y).
+
+% formula(+VS,-F)
+
+% formulasDeTamano(+VS,-F,+N)
+
+
+
+
+
+
+% tieneMateriaAprobada(+E, +M)
+tieneMateriaAprobada(E,M) :- 
+    estudiante(E), 
+    notas(XS),
+    member((E,M,N), XS),
+    N >= 4.
